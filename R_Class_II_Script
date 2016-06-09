@@ -1,0 +1,162 @@
+################
+## R_CLASS_II ##
+################
+
+#In R II we'll get down to some data wrangling and learn how to clean, join and carry out some basic functions in R. 
+
+#In this class we'll look at:
+#1. Getting a sense of the data
+#2. Subsetting data
+#3. Installing packages
+#4. Joining data & errors
+#5. Finding headlines
+
+###################################
+##1. Getting a sense of our data ##
+###################################
+
+#At the end of the previous class we loaded two datasets into RStudio
+#We also assigned new names to the datasets
+#Let’s recap how we did that
+
+#We started with loading DE_EDHIW and assigning it to disposableincome
+disposableincome <- read.csv("DE_EDHIW.csv")
+
+#We then viewed these using View
+View(disposableincome)
+
+#Now let’s get a closer look at our data
+
+#Let's look at some of the dimensions of the data
+#How many rows and columns does the data have?
+#We use the dim function and call the dataset
+dim(disposableincome)
+
+#This is the process for most commands, state the function and the dataset
+
+#What do the first 6 rows of data look like?
+head(disposableincome)
+
+#What do the last 6 rows of data look like?
+tail(disposableincome)
+
+#What are the column names?
+names(disposableincome)
+
+#How many rows are in the dataset?
+nrow(disposableincome)
+
+#How many columns are in the dataset?
+ncol(disposableincome)
+
+###########################
+##2. Installing packages ##
+###########################
+
+#What is a package?
+#Packages allow you to carry out specific functions in R
+#They're free and easy to install
+#To explore all the packages available in your library
+library()
+
+#Some of the best packages for data analysis are the following dplyr and tidyr let's install them now
+
+#dplyr
+install.packages("dplyr")
+
+#The package also needs to be loaded from the library
+library("dplyr")
+
+#tidyr
+install.packages("tidyr")
+library("tidyr")
+
+#Note you need to call the package using "", i.e. "dplyr"
+#This is one of R's quirks
+#Let’s look at where the package is installed
+
+################################
+##3. Sorting & filtering data ##
+################################
+#Let's sort the data, from high to low
+#The function here is arrange
+arrange(disposableincome,EDHIW)
+
+#Let’s talk through the function
+#What is happening in this function?
+
+#As you can see the sort prints the results to the console
+#But let's take a look in the table format...
+View(arrange(disposableincome,EDHIW))
+#This is an example of nesting functions
+
+#Let's mix it up and sort in the other direction
+View(arrange(disposableincome,desc(EDHIW)))
+
+#Let's look at filtering
+#What if I don't want to see all the age groups?
+#Let's say I only want to see people 80 years and over
+#We can subset the data using grep
+#grep searches for a string of matching characters
+disposableincome[grep("80 years and over", disposableincome$Age), ]
+#What's happening in the above command...
+  
+#Now pull the subset for 25 to 29 year olds
+
+####################
+##3. Joining data ##
+####################
+#So we have a dataset we have been working with 
+#But the LIS has just given use a new dataset
+#Let's load the data set in and look at it
+disposableincome_10 <- read.csv("DE_EDHIW_10.csv")
+
+#Take a look at the data
+View(disposableincome_10)
+
+#The structure is exactly the same as the existing dataset
+#The column headers match up so let's append the rows
+#We'll use bind_rows, a function of dplyr
+
+all_de <- bind_rows(disposableincome,disposableincome_10)
+#This throws an error...
+
+#Let's talk about class of the variables
+#To look at the class you can use sapply
+sapply(disposableincome, class)
+sapply(disposableincome_10, class)
+
+View(all_de)
+
+#Let's look at the class of columns in the new file
+sapply(all_de, class)
+
+#We can change the class back to it's original form as a factor...
+all_de$Survey <- factor(all_de$Survey)
+
+#So now we have the complete dataset with the addition of 2010 data in the correct form
+
+################
+##CALCULATIONS##
+################
+
+#Let's look at the median and mean values
+median(all_de$EDHIW)
+mean(all_de$EDHIW)
+
+#and take a look at the outliers
+min(all_de$EDHIW)
+max(all_de$EDHIW)
+
+#############################
+##4. Finding our headlines ##
+#############################
+
+#So now we have looked at our data and talked through our findings
+#Let’s recap on our top lines for our story
+
+###################
+## Caelainn Barr ##
+## The Guardian  ##
+## @caelainnbarr ##
+###################
